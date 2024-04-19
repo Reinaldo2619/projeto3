@@ -16,7 +16,7 @@ int main() {
   do {
     printf("\nMenu:\n");
     printf("1-Adicionar contato\n");
-    printf("2-Lista de  contatos\n");
+    printf("2-Lista de contatos\n");
     printf("3-Excluir contato\n");
     printf("4-Salvar agenda\n");
     printf("5-Carregar agenda\n");
@@ -44,17 +44,47 @@ int main() {
               printf("Erro, contato não adicionado\n");
           }
           break;
+      
       case 2:
           listarContatos(&agenda);
           break;
+     
       case 3:
           printf("\nDigite o telefone do contato que deseja deletar: ");
-          scanf("%14[^\n]", telefone);
+          scanf("%49[^\n]", telefone);
           getchar();
           if (deletarContato(&agenda, telefone)) {
-              printf("Contato deletado com sucesso.\n");
+              printf("Contato deletado\n");
           } else {
-              printf("Contato nao encontrado.\n");
+              printf("Contato nao existe ou ja foi deletado\n");
           }
           break;
+     
+      case 4:
+      salvarAgenda(&agenda, "agenda.bin");
+      printf("Agenda salva\n");
+      break;
 
+      case 5:
+      carregarAgenda(&agenda, "agenda.bin");
+      printf("Agenda carregada\n");
+      break;
+
+      case 0:
+                      printf("");
+                      break;
+                  default:
+                      printf("Opçãoo invalida\n");
+              }
+          } while (opcao != 0);
+
+          return 0;
+      }
+
+
+      
+
+      
+
+     
+                      

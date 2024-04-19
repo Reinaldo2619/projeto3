@@ -24,3 +24,50 @@ int adicionarContato(Agenda *agenda, const char *nome, const char *sobrenome, co
 
     agenda->quantidade++;
     return 1;
+
+  }
+
+  void listarContatos(const Agenda *agenda) {
+      printf("Lista de Contatos:\n");
+      printf("------------------\n");
+      for (int i = 0; i < agenda->quantidade; i++) {
+          printf("%d. Nome: %s %s\n   Email: %s\n   Telefone: %s\n", i + 1, agenda->contatos[i].nome,
+                 agenda->contatos[i].sobrenome, agenda->contatos[i].email, agenda->contatos[i].telefone);
+      }
+  }
+
+  int deletarContato(Agenda *agenda, const char *telefone) {
+      int encontrado = 0;
+      for (int i = 0; i < agenda->quantidade; i++) {
+          if (strcmp(agenda->contatos[i].telefone, telefone) == 0) {
+              encontrado = 1;
+              for (int j = i; j < agenda->quantidade - 1; j++) {
+                  agenda->contatos[j] = agenda->contatos[j + 1];
+              }
+              agenda->quantidade--;
+              break;
+          }
+      }
+      return encontrado;
+  }
+
+  void salvarAgenda(const Agenda *agenda, const char *nomeArquivo) {
+      FILE *arquivo = fopen(nomeArquivo, "wb");
+      if (arquivo == NULL) {
+          printf("Erro ao abrir o arquivo.\n");
+          return;
+      }
+      fwrite(agenda, sizeof(Agenda), 1, arquivo);
+      fclose(arquivo);
+  }
+
+  void carregarAgenda(Agenda *agenda, const char *nomeArquivo) {
+      FILE *arquivo = fopen(nomeArquivo, "rb");
+      if (arquivo == NULL) {
+          printf("Erro ao abrir o arquivo.\n");
+          return;
+      }
+      fread(agenda, sizeof(Agenda), 1, arquivo);
+      fclose(arquivo);
+  }
+
