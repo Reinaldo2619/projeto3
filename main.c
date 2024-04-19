@@ -44,3 +44,17 @@ int main() {
               printf("Erro, contato não adicionado\n");
           }
           break;
+      case 2:
+          listarContatos(&agenda);
+          break;
+      case 3:
+          printf("\nDigite o telefone do contato que deseja deletar: ");
+          scanf("%14[^\n]", telefone);
+          getchar();
+          if (deletarContato(&agenda, telefone)) {
+              printf("Contato deletado com sucesso.\n");
+          } else {
+              printf("Contato nao encontrado.\n");
+          }
+          break;
+
