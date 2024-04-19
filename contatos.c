@@ -70,4 +70,3 @@ int adicionarContato(Agenda *agenda, const char *nome, const char *sobrenome, co
       fread(agenda, sizeof(Agenda), 1, arquivo);
       fclose(arquivo);
   }
-
