@@ -1,17 +1,15 @@
 #ifndef _CONTATOS_H
 #define _CONTATOS_H
-#define MAX_CONTATOS 250
-#define TAM_NOME 1
-#define TAM_SOBRENOME 1
-#define TAM_TELEFONE 10
-#define TAM_EMAIL 10
+#define MAX_CONTATOS 255
 
 typedef struct{
-char[TAM_NOME];
-char[TAM_SOBRENOME];
-char[TAM_EMAIL];
-char[TAM_TELEFONE];
+char nome [50];
+char sobrenome [50];
+char email [50];
+char tel [20];
 
 }Contato;
+
+void CadastrarContato(Contato agenda[], int *ncontato);
 
 #endif 

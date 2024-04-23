@@ -1,51 +1,52 @@
 #include <stdio.h>
 #include "contatos.h"
-#include <string>
+#include <string.h>
 
-int main(){
-  Contato contatos[MAX_CONTATOS];
-  int total_contatos = 0;
-  //variavél de controle do menu
-  int opcao;
+int main() {
+  Contato agenda[MAX_CONTATOS];
+  int ncontato = 0;
+  int menu;
 
-  do{
-    //opções do menu 
-    printf(" --- Menu Principal ---\n");
-    printf("\n");
-    printf("---- ESCOLHA UMA OPÇÃO ----\n");
-    printf("\n");
-    printf("1 - Cadastrar contato\n\t");
-    printf("2 - Listar contatos\n\t");
-    printf("3 - Deletar contato\n\t");
-    printf("4 - Salvar agenda\n\t");
-    printf("5 - Carregar agenda\n\t");
-    printf("6 - Sair\n\t");
-    scanf("%d", &opcao);
+  do {
+    // Opções do menu
+    printf("--- Menu Principal ---\n\n");
+    printf("1 - Cadastrar contato\n");
+    printf("2 - Listar contatos\n");
+    printf("3 - Deletar contato\n");
+    printf("4 - Salvar agenda\n");
+    printf("5 - Carregar agenda\n");
+    printf("6 - Sair\n\n");
+    printf("Escolha uma opção: ");
 
-    //executa a opção escolhida
-    switch(opcao){
-      case 1:
-      printf("Você escolheu a opção 1 - Cadastrar um novo contato\n");
-      case 2:
-      printf("Você escolheu a opção 2 - Listar contatos\n");
-      break;
-      case 3:
-      printf("Você escolheu a opção 3 - Deletar contato\n");
-      break;
-      case 4:
-      printf("Você escolheu a opção 4 - Salvar agenda\n");
-      break;
-      case 5:
-      printf("Você escolheu a opção 5 - Carregar agenda\n");
-      break;
-      case 6:
-      printf("Saindo do programa\n");
-      break;
-      default:
-      printf("Digite uma opção válida\n");
+    // Verificar a entrada
+    if (scanf(" %d", &menu) != 1) {
+      printf("Erro: entrada inválida.\n");
+
+      // Limpar o buffer de entrada
+      int c;
+      while ((c = getchar()) != '\n' && c != EOF)
+        ;
+
+      continue; // Volta ao início do loop
     }
-  }while(opcao != 6); //enquanto a opção for diferente de 6, o programa continua rodando
-} 
 
+    if (menu == 1) {
+      CadastrarContato(agenda, &ncontato);
+    } else if (menu == 2) {
+      printf("Lista de contatos:\n");
+    } else if (menu == 3) {
+      printf("Deletar contato\n");
+    } else if (menu == 4) {
+      printf("Salvar agenda\n");
+    } else if (menu == 5) {
+      printf("Carregar agenda\n");
+    } else if (menu == 6) {
+      printf("Saindo...\n");
+    } else {
+      printf("Opção inválida. Tente novamente.\n");
+    }
 
+  } while (menu != 6); // Enquanto a opção for diferente de 6, o loop continua
 
+  return 0;
+}
