@@ -9,10 +9,10 @@
 
 //Funçao principal
 int main() {
-    Agenda agenda;//Variavel agenda
-    inicializar(&agenda);
+    Agenda agenda;// Variavel agenda
+    inicializarAgenda(&agenda);
 
-  int opcao;// Variaveis do menu de 0 a 6
+  int opcao;// Variaveis para criar o contato
   char nome[50], sobrenome[50], gmail[50], telefone[50];
 
   do {//loop enquanto a opcao for diferente de 0
@@ -86,9 +86,4 @@ int main() {
       }
 
 
-      
-
-      
-
-     
-                      
+                    
