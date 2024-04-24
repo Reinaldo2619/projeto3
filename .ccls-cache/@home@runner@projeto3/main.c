@@ -1,5 +1,5 @@
-#include <stdio.h>
 #include "contatos.h"
+#include <stdio.h>
 #include <string.h>
 
 int main() {
@@ -33,7 +33,7 @@ int main() {
     if (menu == 1) {
       CadastrarContato(agenda, &ncontato);
     } else if (menu == 2) {
-      printf("Lista de contatos:\n");
+      ListarContatos(agenda, ncontato);
     } else if (menu == 3) {
       printf("Deletar contato\n");
     } else if (menu == 4) {

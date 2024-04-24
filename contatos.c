@@ -3,35 +3,59 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <stdio.h>
+
+// Função para limpar o buffer de entrada
+void limparBuffer() {
+  int c;
+  while ((c = getchar()) != '\n' && c != EOF) {
+  }
+}
+
 void CadastrarContato(Contato agenda[], int *ncontato) {
-  if (*ncontato >= MAX_CONTATOS) {
-    printf("Não é possível cadastrar mais contatos, Excedeu o limite máximo de "
-           "contatos\n");
-    return;
-  }
+    if (*ncontato >= MAX_CONTATOS) {
+        printf("Não é possível cadastrar mais contatos, Excedeu o limite máximo de contatos\n");
+        return;
+    }
 
-  printf("Digite o nome :");
-  if (scanf(" %s", agenda[*ncontato].nome) != 1) {
-    printf("erro ao ler o nome\n");
-  }
-  return;
+    printf("Digite o nome: ");
+    if (scanf("%s", agenda[*ncontato].nome) != 1) {
+        printf("Erro ao ler o nome\n");
+        limparBuffer(); // Limpar o buffer de entrada
+        return;
+    }
 
-  printf("Digite o sobrenome :");
-  if (scanf(" %s", agenda[*ncontato].sobrenome) != 1) {
-    printf("erro ao ler o sobrenome\n");
-  }
-  return;
+    printf("Digite o sobrenome: ");
+    if (scanf("%s", agenda[*ncontato].sobrenome) != 1) {
+        printf("Erro ao ler o sobrenome\n");
+        limparBuffer(); // Limpar o buffer de entrada
+        return;
+    }
 
-  printf("Digite o email :");
-  if (scanf(" %s", agenda[*ncontato].email) != 1) {
-    printf("erro ao ler o email\n");
-  }
-  return;
+    printf("Digite o email: ");
+    if (scanf("%s", agenda[*ncontato].email) != 1) {
+        printf("Erro ao ler o email\n");
+        limparBuffer(); // Limpar o buffer de entrada
+        return;
+    }
 
-  printf("Digite o telefone :");
-  if (scanf(" %s", agenda[*ncontato].tel) != 1) {
-    printf("erro ao ler o telefone\n");
-    return;
-  }
+    printf("Digite o telefone: ");
+    if (scanf("%s", agenda[*ncontato].tel) != 1) {
+        printf("Erro ao ler o telefone\n");
+        limparBuffer(); // Limpar o buffer de entrada
+        return;
+    }
+
     (*ncontato)++;
+}
+
+
+void ListarContatos(Contato agenda[], int ncontato) {
+  printf("--LISTA DE CONTATOS--\n\t");
+  for (int i = 0; i < ncontato; i++) {
+    printf("Nome: %s\n", agenda[i].nome);
+    printf("Sobrenome: %s\n", agenda[i].sobrenome);
+    printf("Email: %s\n", agenda[i].email);
+    printf("Telefone: %s\n", agenda[i].tel);
   }
+}
