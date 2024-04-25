@@ -35,7 +35,7 @@ int main() {
     } else if (menu == 2) {
       ListarContatos(agenda, ncontato);
     } else if (menu == 3) {
-      printf("Deletar contato\n");
+      SalvarContatos(agenda, ncontato);
     } else if (menu == 4) {
       printf("Salvar agenda\n");
     } else if (menu == 5) {
