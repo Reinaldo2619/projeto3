@@ -31,4 +31,4 @@ int deletarContato(Agenda *agenda, const char *telefone);
 void salvarAgenda(const Agenda *agenda, const char *nomeArquivo);
 void carregarAgenda(Agenda *agenda, const char *nomeArquivo);
 
-#endif 
+#endif //corrigir
