@@ -35,11 +35,13 @@ int main() {
     } else if (menu == 2) {
       ListarContatos(agenda, ncontato);
     } else if (menu == 3) {
-      SalvarContatos(agenda, ncontato);
+      printf("Digite o telefone do contato a ser deletado:");
+      scanf("%s", agenda[ncontato].tel);
+      DeletarContatos(agenda, &ncontato, agenda[ncontato].tel);
     } else if (menu == 4) {
-      printf("Salvar agenda\n");
+      SalvarContatos(agenda, ncontato);
     } else if (menu == 5) {
-      printf("Carregar agenda\n");
+      CarregarContatos(agenda, &ncontato);
     } else if (menu == 6) {
       printf("Saindo...\n");
     } else {

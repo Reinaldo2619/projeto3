@@ -13,5 +13,7 @@ typedef struct {
 void CadastrarContato(Contato agenda[], int *ncontato);
 void ListarContatos(Contato agenda[], int ncontato);
 void SalvarContatos(Contato agenda[], int ncontato);
+void CarregarContatos(Contato agenda[], int *ncontato);
+void DeletarContatos(Contato agenda[], int *ncontato, char *tel);
 
 #endif

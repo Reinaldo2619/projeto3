@@ -62,7 +62,49 @@ void SalvarContatos(Contato agenda[], int ncontato) {
   FILE *arquivo = fopen("arquivo.bin", "wb");
   if (arquivo == NULL) {
     printf("Erro ao abrir o arquivo\n");
+    return;
   }
   fwrite(&ncontato, sizeof(int), 1, arquivo);
   fwrite(agenda, sizeof(Contato), ncontato, arquivo);
+
+  fclose(arquivo);
+}
+void CarregarContatos(Contato agenda[], int *ncontato) {
+  FILE *arquivo = fopen("arquivo.bin", "rb");
+  if (arquivo == NULL) {
+    printf("Erro ao abrir o arquivo\n");
+    return;
+  }
+
+  size_t num_elements_read;
+
+  num_elements_read = fread(ncontato, sizeof(int), 1, arquivo);
+  if (num_elements_read != 1) {
+    printf("Erro ao ler o número de contatos\n");
+    fclose(arquivo);
+    return;
+  }
+
+  num_elements_read = fread(agenda, sizeof(Contato), *ncontato, arquivo);
+  if (num_elements_read != *ncontato) {
+    printf("Erro ao ler os contatos\n");
+    fclose(arquivo);
+    return;
+  }
+
+  fclose(arquivo);
+}
+void DeletarContatos(Contato agenda[], int *ncontato, char *tel) {
+
+  for (int i = 0; i < *ncontato; i++) {
+    if (strcmp(agenda[i].tel, tel) == 0) {
+      for (int j = i; j < *ncontato - 1; j++) {
+        agenda[j] = agenda[j + 1];
+      }
+      (*ncontato)--;
+      printf("Contato deletado com sucesso\n");
+      return;
+    }
+  }
+  printf("Contato com telefone %s não encontrado\n", tel);
 }
