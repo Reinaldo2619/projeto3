@@ -54,7 +54,7 @@ int adicionarContato(Agenda *agenda, const char *nome, const char *sobrenome, co
   }// Indica se o contato foi encontrado e deletado
 
   void salvarAgenda(const Agenda *agenda, const char *nomeArquivo) {// Define a funçao salvar agenda
-      FILE *arquivo = fopen(nomeArquivo, "B");// Escrita binaria
+      FILE *arquivo = fopen(nomeArquivo, "wb");// Escrita binaria
       if (arquivo == NULL) {// Verifica se houve um erro ao abrir o arquivo
           printf("Erro ao abrir o arquivo\n");// Se dar  erro exibe a menssagem "Erro ao abrir o arquivo""
           return;
@@ -64,11 +64,12 @@ int adicionarContato(Agenda *agenda, const char *nome, const char *sobrenome, co
   }
 
   void carregarAgenda(Agenda *agenda, const char *nomeArquivo) {// Define a variavel carregar agenda
-      FILE *arquivo = fopen(nomeArquivo, "R");//  Abre arquivo para ler binario
+      FILE *arquivo = fopen(nomeArquivo, "rb");//  Abre arquivo para ler binario
       if (arquivo == NULL) {// Ve se teve erro pra abrir o arquivo
           printf("Erro ao abrir o arquivo\n");// Se tiver manda a menssagem "Erro ao abrir o arquivo""
           return;
       }
+    
       fread(agenda, sizeof(Agenda), 1, arquivo);
-      fclose(arquivo);// Feca o arquivo depois de ler
+      fclose(arquivo);// Fecha o arquivo depois de ler
   }
