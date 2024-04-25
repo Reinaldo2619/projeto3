@@ -6,6 +6,7 @@ int main() {
   Contato agenda[MAX_CONTATOS];
   int ncontato = 0;
   int menu;
+  char tel[MAX_CONTATOS];
 
   do {
     // Opções do menu
@@ -35,9 +36,11 @@ int main() {
     } else if (menu == 2) {
       ListarContatos(agenda, ncontato);
     } else if (menu == 3) {
-      printf("Digite o telefone do contato a ser deletado:");
-      scanf("%s", agenda[ncontato].tel);
-      DeletarContatos(agenda, &ncontato, agenda[ncontato].tel);
+      printf("Digite o telefone do contato a ser          deletado:");
+      if (scanf("%s", tel) != 1) {
+        printf("Erro ao ler o telefone\n");
+      }
+      DeletarContatos(agenda, &ncontato, tel);
     } else if (menu == 4) {
       SalvarContatos(agenda, ncontato);
     } else if (menu == 5) {
