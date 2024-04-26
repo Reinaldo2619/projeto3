@@ -1,7 +1,8 @@
-#include "contatos.h"
+#include "contatos.h" // Include do arquivo de cabeçalho
 #include <stdio.h>
 #include <string.h>
 
+// int de inicio com algumas variaveis
 int main() {
   Contato agenda[MAX_CONTATOS];
   int ncontato = 0;
@@ -9,7 +10,7 @@ int main() {
   char tel[MAX_CONTATOS];
 
   do {
-    // Opções do menu
+    // Opções do menu de opções de 1 a 6
     printf("--- Menu Principal ---\n\n");
     printf("1 - Cadastrar contato\n");
     printf("2 - Listar contatos\n");
@@ -30,21 +31,21 @@ int main() {
 
       continue; // Volta ao início do loop
     }
-
+    // Menu principal do programa usando if , else if e else
     if (menu == 1) {
-      CadastrarContato(agenda, &ncontato);
+      CadastrarContato(agenda, &ncontato); // Chama a função CadastrarContato
     } else if (menu == 2) {
-      ListarContatos(agenda, ncontato);
+      ListarContatos(agenda, ncontato); // Chama a função ListarContatos
     } else if (menu == 3) {
-      printf("Digite o telefone do contato a ser          deletado:");
+      printf("Digite o telefone do contato a ser deletado:");
       if (scanf("%s", tel) != 1) {
         printf("Erro ao ler o telefone\n");
       }
-      DeletarContatos(agenda, &ncontato, tel);
+      DeletarContatos(agenda, &ncontato, tel); // Chama a função DeletarContatos
     } else if (menu == 4) {
-      SalvarContatos(agenda, ncontato);
+      SalvarContatos(agenda, ncontato); // Chama a função SalvarContatos
     } else if (menu == 5) {
-      CarregarContatos(agenda, &ncontato);
+      CarregarContatos(agenda, &ncontato); // Chama a função CarregarContatos
     } else if (menu == 6) {
       printf("Saindo...\n");
     } else {
