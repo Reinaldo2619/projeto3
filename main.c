@@ -32,28 +32,28 @@ int main() {
             case 1:
                 printf("\nDigite o nome: ");
                 if (scanf("%49s", nome) != 1) {
-                    printf("Erro ao ler o nome.\n");
+                    printf("Erro\n");
                     return 1;
                 }
                 getchar();
 
                 printf("\nDigite o sobrenome: ");
                 if (scanf("%49s", sobrenome) != 1) {
-                    printf("Erro ao ler o sobrenome.\n");
+                    printf("Erro\n");
                     return 1;
                 }
                 getchar();
 
                 printf("\nDigite o gmail: ");
                 if (scanf("%49s", gmail) != 1) {
-                    printf("Erro ao ler o gmail.\n");
+                    printf("Erro\n");
                     return 1;
                 }
                 getchar();
 
                 printf("\nDigite o telefone: ");
                 if (scanf("%49s", telefone) != 1) {
-                    printf("Erro ao ler o telefone.\n");
+                    printf("Erro\n");
                     return 1;
                 }
                 getchar();
@@ -61,7 +61,7 @@ int main() {
                 if (adicionarContato(&agenda, nome, sobrenome, gmail, telefone)) {
                     printf("Contato adicionado\n");
                 } else {
-                    printf("Erro, contato não adicionado\n");
+                    printf("Erro\n");
                 }
                 break;
 
@@ -69,19 +69,19 @@ int main() {
                 listarContatos(&agenda);
                 break;
 
-            case 3:
-                printf("\nDigite o telefone do contato que deseja deletar: ");
-                if (scanf("%49[^\n]", telefone) != 1) {
-                    printf("Erro ao ler o telefone.\n");
-                    return 1;
-                }
-                getchar();
-                if (deletarContato(&agenda, telefone)) {
-                    printf("Contato deletado\n");
-                } else {
-                    printf("Contato não existe ou já foi deletado\n");
-                }
-                break;
+          case 3:
+          printf("\nDigite o telefone do contato que deseja deletar: ");
+          if (scanf("%49s", telefone) != 1) {
+              printf("Erro ao ler o telefone.\n");
+              return 1;
+          }
+          getchar(); // Limpa o buffer 
+          if (deletarContato(&agenda, telefone)) {
+              printf("Contato deletado\n");
+          } else {
+              printf("Contato não existe ou já foi deletado\n");
+          }
+          break;
 
             case 4:
                 salvarAgenda(&agenda, "agenda.bin");
