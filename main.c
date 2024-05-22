@@ -8,7 +8,7 @@
 
 int main() {
     Agenda agenda;
-    inicializarAgenda(&agenda);
+    inicializaragenda(&agenda);
 
     int opcao;
     char nome[50], sobrenome[50], gmail[50], telefone[50];
@@ -58,7 +58,7 @@ int main() {
                 }
                 getchar();
 
-                if (adicionarContato(&agenda, nome, sobrenome, gmail, telefone)) {
+                if (adicionarcontato(&agenda, nome, sobrenome, gmail, telefone)) {
                     printf("Contato adicionado\n");
                 } else {
                     printf("Erro\n");
@@ -66,7 +66,7 @@ int main() {
                 break;
 
             case 2:
-                listarContatos(&agenda);
+                listarcontatos(&agenda);
                 break;
 
           case 3:
@@ -76,7 +76,7 @@ int main() {
               return 1;
           }
           getchar(); // Limpa o buffer 
-          if (deletarContato(&agenda, telefone)) {
+          if (deletarcontato(&agenda, telefone)) {
               printf("Contato deletado\n");
           } else {
               printf("Contato não existe ou já foi deletado\n");
@@ -84,12 +84,12 @@ int main() {
           break;
 
             case 4:
-                salvarAgenda(&agenda, "agenda.bin");
+                salvaragenda(&agenda, "agenda.bin");
                 printf("Agenda salva\n");
                 break;
 
             case 5:
-                carregarAgenda(&agenda, "agenda.bin");
+                carregaragenda(&agenda, "agenda.bin");
                 printf("Agenda carregada\n");
                 break;
 

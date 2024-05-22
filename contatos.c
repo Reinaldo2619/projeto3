@@ -3,18 +3,47 @@
 #include <string.h>
 #include <regex.h>
 
-void inicializarAgenda(Agenda *agenda) {
+void inicializaragenda(Agenda *agenda) {
   agenda->quantidade = 0;
 }
 
-int adicionarContato(Agenda *agenda, const char *nome, const char *sobrenome, const char *email, const char *telefone) {
+int validaremail(const char *email) {
+    const char *regex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+
+    regex_t reg;
+    if (regcomp(&reg, regex, REG_EXTENDED) != 0) {
+        printf("Erro ao compilar a expressão regular\n");
+        return 0;
+    }
+
+    int result = regexec(&reg, email, 0, NULL, 0);
+    regfree(&reg);
+
+    return result == 0;
+}
+
+int telefoneexiste(const Agenda *agenda, const char *telefone) {
+    for (int i = 0; i < agenda->quantidade; i++) {
+        if (strcmp(agenda->contatos[i].telefone, telefone) == 0) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+int adicionarcontato(Agenda *agenda, const char *nome, const char *sobrenome, const char *email, const char *telefone) {
   if (agenda->quantidade >= MAX_CONTATOS) {
     printf("Erro, limite de contatos atingido.\n");
     return 0;
   }
 
-  if (!validarEmail(email)) {
+  if (!validaremail(email)) {
     printf("Email inválido. Por favor, insira um email válido.\n");
+    return 0;
+  }
+
+  if (telefoneexiste(agenda, telefone)) {
+    printf("Erro, telefone já existe. Por favor, insira um telefone único.\n");
     return 0;
   }
 
@@ -27,7 +56,7 @@ int adicionarContato(Agenda *agenda, const char *nome, const char *sobrenome, co
   return 1;
 }
 
-void listarContatos(const Agenda *agenda) {
+void listarcontatos(const Agenda *agenda) {
   printf("Lista de Contatos:\n");
   printf("------------------\n");
   for (int i = 0; i < agenda->quantidade; i++) {
@@ -38,7 +67,7 @@ void listarContatos(const Agenda *agenda) {
   }
 }
 
-int deletarContato(Agenda *agenda, const char *telefone) {
+int deletarcontato(Agenda *agenda, const char *telefone) {
   int encontrado = 0;
   for (int i = 0; i < agenda->quantidade; i++) {
     if (strcmp(agenda->contatos[i].telefone, telefone) == 0) {
@@ -53,7 +82,7 @@ int deletarContato(Agenda *agenda, const char *telefone) {
   return encontrado;
 }
 
-void salvarAgenda(const Agenda *agenda, const char *nomeArquivo) {
+void salvaragenda(const Agenda *agenda, const char *nomeArquivo) {
   FILE *arquivo = fopen(nomeArquivo, "wb");
   if (arquivo == NULL) {
     printf("Erro ao abrir o arquivo\n");
@@ -63,7 +92,7 @@ void salvarAgenda(const Agenda *agenda, const char *nomeArquivo) {
   fclose(arquivo);
 }
 
-void carregarAgenda(Agenda *agenda, const char *nomeArquivo) {
+void carregaragenda(Agenda *agenda, const char *nomeArquivo) {
   FILE *arquivo = fopen(nomeArquivo, "rb");
   if (arquivo == NULL) {
     printf("Erro ao abrir o arquivo\n");
@@ -72,23 +101,4 @@ void carregarAgenda(Agenda *agenda, const char *nomeArquivo) {
 
   int lidos = fread(agenda, sizeof(Agenda), 1, arquivo);
   fclose(arquivo);
-}
-
-int validarEmail(const char *email) {
-    const char *regex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
-
-    regex_t reg;
-    if (regcomp(&reg, regex, REG_EXTENDED) != 0) {
-        printf("Erro ao compilar a expressão regular\n");
-        return 0;
-    }
-
-    int result = regexec(&reg, email, 0, NULL, 0);
-    regfree(&reg);
-
-    if (result == 0) {
-        return 1;
-    } else {
-        return 0;
-    }
 }

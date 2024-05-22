@@ -15,12 +15,13 @@ typedef struct {
     int quantidade;
 } Agenda;
 
-void inicializarAgenda(Agenda *agenda);
-int adicionarContato(Agenda *agenda, const char *nome, const char *sobrenome, const char *email, const char *telefone);
-void listarContatos(const Agenda *agenda);
-int deletarContato(Agenda *agenda, const char *telefone);
-void salvarAgenda(const Agenda *agenda, const char *nomeArquivo);
-void carregarAgenda(Agenda *agenda, const char *nomeArquivo);
-int validarEmail(const char *email);
+void inicializaragenda(Agenda *agenda);
+int adicionarcontato(Agenda *agenda, const char *nome, const char *sobrenome, const char *email, const char *telefone);
+void listarcontatos(const Agenda *agenda);
+int deletarcontato(Agenda *agenda, const char *telefone);
+void salvaragenda(const Agenda *agenda, const char *nomeArquivo);
+void carregaragenda(Agenda *agenda, const char *nomeArquivo);
+int validaremail(const char *email);
+int telefoneexiste(const Agenda *agenda, const char *telefone);
 
 #endif
