@@ -12,7 +12,7 @@ int validaremail(const char *email) {
 
     regex_t reg;
     if (regcomp(&reg, regex, REG_EXTENDED) != 0) {
-        printf("Erro ao compilar a expressão regular\n");
+        printf("Erro\n");
         return 0;
     }
 
@@ -33,7 +33,7 @@ int telefoneexiste(const Agenda *agenda, const char *telefone) {
 
 int adicionarcontato(Agenda *agenda, const char *nome, const char *sobrenome, const char *email, const char *telefone) {
   if (agenda->quantidade >= MAX_CONTATOS) {
-    printf("Erro, limite de contatos atingido.\n");
+    printf("Erro, limite de contatos foi atingido.\n");
     return 0;
   }
 
@@ -43,7 +43,7 @@ int adicionarcontato(Agenda *agenda, const char *nome, const char *sobrenome, co
   }
 
   if (telefoneexiste(agenda, telefone)) {
-    printf("Erro, telefone já existe. Por favor, insira um telefone único.\n");
+    printf("Erro, telefone já existe.\n");
     return 0;
   }
 
