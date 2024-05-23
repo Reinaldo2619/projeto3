@@ -1,15 +1,9 @@
-//        gcc *.c && ./a.out
-//        git add nome
-//        git commit -m "escreva"
-//        git push -u origin main
-
-// Bibliotecas
 #ifndef CONTATOS_H
 #define CONTATOS_H
 
 #define MAX_CONTATOS 255 // Define o número máximo de contatos na agenda
 
-// Estrutura para armazenar informaçoes do contato
+// Estrutura para armazenar informações do contato
 typedef struct {
   char nome[50];      // Nome do contato
   char sobrenome[50]; // Sobrenome do contato
@@ -23,7 +17,7 @@ typedef struct {
   int quantidade;                 // Quantidade de contatos
 } Agenda;
 
-// Declarando funçoes
+// Declaração das funções
 void inicializarAgenda(Agenda *agenda); // Inicializa a agenda
 int adicionarContato(Agenda *agenda, const char *nome, const char *sobrenome,
                      const char *email,
@@ -38,6 +32,10 @@ void carregarAgenda(Agenda *agenda,
 int validarEmail(const char *email);          // Valida o email
 int telefoneExiste(
     const Agenda *agenda,
-    const char *telefone); // Verifica se o telefone ja existe na agenda
+    const char *telefone); // Verifica se o telefone já existe na agenda
+
+// Declaração da função para alterar dados do contato
+int alterarContato(Agenda *agenda, const char *telefone);
+
 
 #endif
