@@ -1,58 +1,120 @@
-#include "contatos.h" // Include do arquivo de cabeçalho
-#include <stdio.h>
-#include <string.h>
+//        gcc *.c && ./a.out
+//        git add nome
+//        git commit -m "escreva"
+//        git push -u origin main
 
-// int de inicio com algumas variaveis
+// Bibliotecas
+#include <stdio.h> 
+#include "contatos.h" 
+
 int main() {
-  Contato agenda[MAX_CONTATOS];
-  int ncontato = 0;
-  int menu;
-  char tel[MAX_CONTATOS];
+    Agenda agenda; // Declara uma variável do tipo Agenda
+    inicializarAgenda(&agenda); // Inicializa a agenda
 
-  do {
-    // Opções do menu de opções de 1 a 6
-    printf("--- Menu Principal ---\n\n");
-    printf("1 - Cadastrar contato\n");
-    printf("2 - Listar contatos\n");
-    printf("3 - Deletar contato\n");
-    printf("4 - Salvar agenda\n");
-    printf("5 - Carregar agenda\n");
-    printf("6 - Sair\n\n");
-    printf("Escolha uma opção: ");
+    int opcao; // Variavel para armazenar a opçao do menu
+    char nome[50], sobrenome[50], gmail[50], telefone[50]; // Variaveis para armazenar os dados do contato que sera adicionado
 
-    // Verificar a entrada
-    if (scanf(" %d", &menu) != 1) {
-      printf("Erro: entrada inválida.\n");
+    do {
+        // Exibe o menu de opçoes
+        printf("\nMenu:\n");
+        printf("1-Adicionar contato\n");
+        printf("2-Lista de contatos\n");
+        printf("3-Excluir contato\n");
+        printf("4-Salvar agenda\n");
+        printf("5-Carregar agenda\n");
+        printf("0-Sair\n");
+        printf("Escolha uma opcao: ");
 
-      // Limpar o buffer de entrada
-      int c;
-      while ((c = getchar()) != '\n' && c != EOF)
-        ;
+        // Lê a opçao do usuário
+        if (scanf("%d", &opcao) != 1) {
+            printf("Erro ao ler a opcao.\n");
+            return 1;
+        }
 
-      continue; // Volta ao início do loop
-    }
-    // Menu principal do programa usando if , else if e else
-    if (menu == 1) {
-      CadastrarContato(agenda, &ncontato); // Chama a função CadastrarContato
-    } else if (menu == 2) {
-      ListarContatos(agenda, ncontato); // Chama a função ListarContatos
-    } else if (menu == 3) {
-      printf("Digite o telefone do contato a ser deletado:");
-      if (scanf("%s", tel) != 1) {
-        printf("Erro ao ler o telefone\n");
-      }
-      DeletarContatos(agenda, &ncontato, tel); // Chama a função DeletarContatos
-    } else if (menu == 4) {
-      SalvarContatos(agenda, ncontato); // Chama a função SalvarContatos
-    } else if (menu == 5) {
-      CarregarContatos(agenda, &ncontato); // Chama a função CarregarContatos
-    } else if (menu == 6) {
-      printf("Saindo...\n");
-    } else {
-      printf("Opção inválida. Tente novamente.\n");
-    }
+        // Verifica a opçao que foi escolhida
+        switch (opcao) {
+            case 1:
+                // Adicionar contato
+                printf("\nDigite o nome: ");
+                if (scanf("%49s", nome) != 1) {
+                    printf("Erro\n");
+                    return 1;
+                }
+                getchar(); // Limpar o buffer
 
-  } while (menu != 6); // Enquanto a opção for diferente de 6, o loop continua
+                printf("\nDigite o sobrenome: ");
+                if (scanf("%49s", sobrenome) != 1) {
+                    printf("Erro\n");
+                    return 1;
+                }
+                getchar(); // Limpar o buffer
 
-  return 0;
+                printf("\nDigite o gmail: ");
+                if (scanf("%49s", gmail) != 1) {
+                    printf("Erro\n");
+                    return 1;
+                }
+                getchar(); // Limpar o buffer
+
+                printf("\nDigite o telefone: ");
+                if (scanf("%49s", telefone) != 1) {
+                    printf("Erro\n");
+                    return 1;
+                }
+                getchar(); // Limpa o buffer
+
+                // Adiciona o contato e verifica se ele foi adicionado
+                if (adicionarContato(&agenda, nome, sobrenome, gmail, telefone)) {
+                    printf("Contato adicionado\n");
+                } else {
+                    printf("Erro\n");
+                }
+                break;
+
+            case 2:
+                // Listar contatos
+                listarContatos(&agenda);
+                break;
+
+            case 3:
+                // Excluir contato
+                printf("\nDigite o telefone do contato que deseja deletar: ");
+                if (scanf("%49s", telefone) != 1) {
+                    printf("Erro ao ler o telefone.\n");
+                    return 1;
+                }
+                getchar(); // Limpar o buffer
+
+                // Deleta o contato e verifica se foi deletado
+                if (deletarContato(&agenda, telefone)) {
+                    printf("Contato deletado\n");
+                } else {
+                    printf("Contato não existe ou já foi deletado\n");
+                }
+                break;
+
+            case 4:
+                // Salvar agenda em arquivo
+                salvarAgenda(&agenda, "agenda.bin");
+                printf("Agenda salva\n");
+                break;
+
+            case 5:
+                // Carregar agenda de arquivo
+                carregarAgenda(&agenda, "agenda.bin");
+                printf("Agenda carregada\n");
+                break;
+
+            case 0:
+                // Sair do programa
+                printf("Encerrando...\n");
+                break;
+
+            default:
+                // Opção inválida
+                printf("Opção inválida\n");
+        }
+    } while (opcao != 0); // Exibe o menu ate o usuário escolher sair
+
+    return 0; // Retorna 0 para indicar que o programa terminou 
 }

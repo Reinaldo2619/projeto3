@@ -1,130 +1,126 @@
-#include "contatos.h" // Include do arquivo de cabeçalho
-#include <stdio.h>    // Inclui a biblioteca padrão de entrada e saída
-#include <stdlib.h>   // Inclui a biblioteca padrão de alocação de memória
-#include <string.h>   // Inclui a biblioteca padrão de manipulação de strings
+//        gcc *.c && ./a.out
+//        git add nome
+//        git commit -m "escreva"
+//        git push -u origin main
 
-// Função para limpar o buffer de entrada
-void limparBuffer() {
-  int c;
-  while ((c = getchar()) != '\n' && c != EOF) {
-  }
-  printf("\n");
+//Bibliotecas
+#include "contatos.h" 
+#include <stdio.h>
+#include <string.h> 
+#include <regex.h> 
+
+// Inicializa a agenda
+void inicializarAgenda(Agenda *agenda) {
+  agenda->quantidade = 0; // Define a quantidade de contatos como 0
 }
 
-// função para cadastrar um contato, salvando os dados em um arquivo
-void CadastrarContato(Contato agenda[], int *ncontato) {
-  if (*ncontato >= MAX_CONTATOS) {
-    printf("Não é possível cadastrar mais contatos, Excedeu o limite máximo de "
-           "contatos\n");
-    return;
-  }
+// Funçao para validar o email 
+int validarEmail(const char *email) {
+    const char *regex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+    regex_t reg; 
+    if (regcomp(&reg, regex, REG_EXTENDED) != 0) { // Compilar
+        return 0; // Retornarr 0 se houver erro na compilação
+    }
 
-  printf("Digite o nome: "); // Pede o nome do contato
-  if (scanf("%s", agenda[*ncontato].nome) !=
-      1) { // Verifica se a entrada foi válida
-    printf("Erro ao ler o nome\n");
-    limparBuffer(); // Limpar o buffer de entrada
-    return;
-  }
+    // Validar o email
+    int result = regexec(&reg, email, 0, NULL, 0);
+    regfree(&reg); // Libera a memória
 
-  printf("Digite o sobrenome: "); // Pede o sobrenome do contato
-  if (scanf("%s", agenda[*ncontato].sobrenome) !=
-      1) { // Verifica se a entrada foi válida
-    printf("Erro ao ler o sobrenome\n");
-    limparBuffer(); // Limpar o buffer de entrada
-    return;
-  }
-
-  printf("Digite o email: "); // Pede o email do contato
-  if (scanf("%s", agenda[*ncontato].email) !=
-      1) { // Verifica se a entrada foi válida
-    printf("Erro ao ler o email\n");
-    limparBuffer(); // Limpar o buffer de entrada
-    return;
-  }
-
-  printf("Digite o telefone: "); // Pede o telefone do contato
-  if (scanf("%s", agenda[*ncontato].tel) !=
-      1) { // Verifica se a entrada foi válida
-    printf("Erro ao ler o telefone\n");
-    limparBuffer(); // Limpar o buffer de entrada
-    return;
-  }
-
-  (*ncontato)++;
+    return result == 0; // Retorna 1 se o email for valido, caso nao seja retorna 0
 }
 
-// Função para listar os contatos, exibindo os dados em um arquivo
-void ListarContatos(
-    Contato agenda[],
-    int ncontato) { // Recebe um vetor de contatos e o número de contatos
-  printf("--LISTA DE CONTATOS--\n\t");
-  for (int i = 0; i < ncontato; i++) {
-    printf("Nome: %s\n", agenda[i].nome);
-    printf("Sobrenome: %s\n", agenda[i].sobrenome);
-    printf("Email: %s\n", agenda[i].email);
-    printf("Telefone: %s\n", agenda[i].tel);
-    printf("\n\t");
+// Função para verificar se o telefone ja existe
+int telefoneExiste(const Agenda *agenda, const char *telefone) {
+    // Loop para verificar cada contato 
+    for (int i = 0; i < agenda->quantidade; i++) {
+        if (strcmp(agenda->contatos[i].telefone, telefone) == 0) {
+            return 1; // Retorna 1 se o telefone ja existe
+        }
+    }
+    return 0; // Retorna 0 se o telefone nao existe
+}
+// Funçao para adicionar um contato na agenda
+int adicionarContato(Agenda *agenda, const char *nome, const char *sobrenome, const char *email, const char *telefone) {
+  // Verifica se a agenda esta cheia
+  if (agenda->quantidade >= MAX_CONTATOS) {
+    printf("Erro, limite de contatos foi atingido.\n");
+    return 0; // Retorna 0 caso a agenda ja tenha atingido o limite
+  }
+
+  // Verifica se o email e valido
+  if (!validarEmail(email)) {
+    printf("Email inválido. Por favor, insira um email válido.\n");
+    return 0; // Retorna 0 se o email for invalido
+  }
+
+  // Verifica se o telefone ja existe 
+  if (telefoneExiste(agenda, telefone)) {
+    printf("Erro, telefone já existe.\n");
+    return 0; // Retorna 0 se o telefone ja existe
+  }
+
+  // Copia os dados do contato para a proxima posiçao na agenda
+  strcpy(agenda->contatos[agenda->quantidade].nome, nome);
+  strcpy(agenda->contatos[agenda->quantidade].sobrenome, sobrenome);
+  strcpy(agenda->contatos[agenda->quantidade].email, email);
+  strcpy(agenda->contatos[agenda->quantidade].telefone, telefone);
+
+  // Incrementa a quantidade de contatos
+  agenda->quantidade++;
+  return 1; // Retorna 1 se o contato foi adicionado
+}
+
+// Funçao para listar os contatos da agenda
+void listarContatos(const Agenda *agenda) {
+  printf("Lista de Contatos:\n");
+  printf("------------------\n");
+  // Loop para imprimir os contatos
+  for (int i = 0; i < agenda->quantidade; i++) {
+    printf("%d. Nome: %s %s\n   Email: %s\n   Telefone: %s\n", i + 1,
+           agenda->contatos[i].nome, agenda->contatos[i].sobrenome,
+           agenda->contatos[i].email, agenda->contatos[i].telefone);
   }
 }
-// Função para salvar os contatos em um arquivo binario
-void SalvarContatos(Contato agenda[], int ncontato) {
-  FILE *arquivo =
-      fopen("arquivo.bin", "wb"); // Abre o arquivo em modo de escrita binária
-  if (arquivo == NULL) {
-    printf("Erro ao abrir o arquivo\n");
-    return;
-  }
-  fwrite(&ncontato, sizeof(int), 1,
-         arquivo); // Escreve o número de contatos no arquivo
-  fwrite(agenda, sizeof(Contato), ncontato,
-         arquivo); // Escreve os contatos no arquivo
-  printf("-----------------------------\n");
-  printf("Contatos salvos com sucesso\n");
-  fclose(arquivo); // Fecha o arquivo
-}
-// Função para carregar os contatos de um arquivo binario
-void CarregarContatos(Contato agenda[], int *ncontato) {
-  FILE *arquivo =
-      fopen("arquivo.bin", "rb"); // Abre o arquivo em modo de leitura binária
-  if (arquivo == NULL) {
-    printf("Erro ao abrir o arquivo\n");
-    return;
-  }
 
-  size_t num_elements_read;
-
-  num_elements_read = fread(ncontato, sizeof(int), 1,
-                            arquivo); // Lê o número de contatos do arquivo
-  if (num_elements_read != 1) {
-    printf("Erro ao ler o número de contatos\n");
-    fclose(arquivo); // Fecha o arquivo
-    return;
-  }
-
-  num_elements_read = fread(agenda, sizeof(Contato), *ncontato, arquivo); //
-  if (num_elements_read != *ncontato) {                                   //
-    printf("Erro ao ler os contatos\n");
-    fclose(arquivo);
-    return;
-  }
-
-  fclose(arquivo);
-}
-// Função para deletar um contato pelo telefone
-void DeletarContatos(Contato agenda[], int *ncontato, char *tel) {
-
-  for (int i = 0; i < *ncontato; i++) { // Percorre o vetor de contatos
-    if (strcmp(agenda[i].tel, tel) ==
-        0) { // Compara o telefone do contato com o telefone fornecido
-      for (int j = i; j < *ncontato - 1;
-           j++) { // Desloca os contatos para preencher o espaço vazio
-        agenda[j] = agenda[j + 1];
+// Funçao para deletar contato 
+int deletarContato(Agenda *agenda, const char *telefone) {
+  int encontrado = 0; // Variavel para verificar se o contato foi encontrado
+  // Loop para verificar os contatos 
+  for (int i = 0; i < agenda->quantidade; i++) {
+    if (strcmp(agenda->contatos[i].telefone, telefone) == 0) {
+      encontrado = 1; // Define como encontrado se o telefone for igual
+      // Move todos os contatos depois de encontrar, uma posição para tras
+      for (int j = i; j < agenda->quantidade - 1; j++) {
+        agenda->contatos[j] = agenda->contatos[j + 1];
       }
-      (*ncontato)--;
-      printf("Contato deletado com sucesso\n");
-      return;
+      agenda->quantidade--; // Decrementa a quantidade de contatos
+      break;
     }
   }
-  printf("Contato com telefone %s não encontrado\n", tel);
+  return encontrado; // Retorna 1 se o contato foi encontrado e deletado caso nao seja retornar 0
+}
+
+// Funçao para salvar a agenda em um arquivo
+void salvarAgenda(const Agenda *agenda, const char *nomeArquivo) {
+  FILE *arquivo = fopen(nomeArquivo, "wb"); // Abre o arquivo para escrita binaria
+  if (arquivo == NULL) {
+    printf("Erro ao abrir o arquivo\n");
+    return; // Retorna se houver erro ao abrir
+  }
+  // Escreve os dados da agenda no arquivo
+  fwrite(agenda, sizeof(Agenda), 1, arquivo);
+  fclose(arquivo); // Fecha o arquivo
+}
+
+// Funçao para carregar a agenda de um arquivo
+void carregarAgenda(Agenda *agenda, const char *nomeArquivo) {
+  FILE *arquivo = fopen(nomeArquivo, "rb"); // Abre o arquivo para leitura binaria
+  if (arquivo == NULL) {
+    printf("Erro ao abrir o arquivo\n");
+    return; // Retorna se houver erro ao abrir o arquivo
+  }
+
+  // Le os dados da agenda do arquivo
+  int lidos = fread(agenda, sizeof(Agenda), 1, arquivo);
+  fclose(arquivo); // Fecha o arquivo
 }
