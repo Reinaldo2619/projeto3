@@ -5,3 +5,7 @@ Este codigo permite criar uma agenda de contatos com 50 contatos no maximo, com 
 4 Salva a agenda no arquivo binário
 5 Carrega a agenda do arquivo binário
 0 Encerra o codigo
+
+Maurilio Bezerra da Silva ra: 22.123.108-7
+
+Reinaldo Dias Esteves Macieira Junior ra : 22.223.087-2
