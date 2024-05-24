@@ -11,11 +11,11 @@ int main() {
     Agenda agenda; // Declara uma variável do tipo Agenda
     inicializarAgenda(&agenda); // Inicializa a agenda
 
-    int opcao; // Variavel para armazenar a opçao do menu
+    int opcao; // Variavel para armazenar o menu
     char nome[50], sobrenome[50], gmail[50], telefone[50]; // Variaveis para armazenar os dados do contato que sera adicionado
 
     do {
-        // Exibe o menu de opçoes
+        // menu de opçoes
         printf("\nMenu:\n");
         printf("1-Adicionar contato\n");
         printf("2-Lista de contatos\n");
@@ -25,7 +25,7 @@ int main() {
         printf("0-Sair\n");
         printf("Escolha uma opcao: ");
 
-        // Lê a opçao do usuário
+        // Le a opçao do usuario
         if (scanf("%d", &opcao) != 1) {
             printf("Erro ao ler a opcao.\n");
             return 1;
@@ -47,22 +47,21 @@ int main() {
                     printf("Erro\n");
                     return 1;
                 }
-                getchar(); // Limpar o buffer
+                getchar(); 
 
                 printf("\nDigite o gmail: ");
                 if (scanf("%49s", gmail) != 1) {
                     printf("Erro\n");
                     return 1;
                 }
-                getchar(); // Limpar o buffer
+                getchar(); 
 
                 printf("\nDigite o telefone: ");
                 if (scanf("%49s", telefone) != 1) {
                     printf("Erro\n");
                     return 1;
                 }
-                getchar(); // Limpa o buffer
-
+                getchar(); 
                 // Adiciona o contato e verifica se ele foi adicionado
                 if (adicionarContato(&agenda, nome, sobrenome, gmail, telefone)) {
                     printf("Contato adicionado\n");
@@ -83,7 +82,7 @@ int main() {
                     printf("Erro ao ler o telefone.\n");
                     return 1;
                 }
-                getchar(); // Limpar o buffer
+                getchar(); /
 
                 // Deleta o contato e verifica se foi deletado
                 if (deletarContato(&agenda, telefone)) {
@@ -111,7 +110,7 @@ int main() {
                 break;
 
             default:
-                // Opção inválida
+                // Opção invalida
                 printf("Opção inválida\n");
         }
     } while (opcao != 0); // Exibe o menu ate o usuário escolher sair

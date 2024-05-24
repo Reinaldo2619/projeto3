@@ -24,13 +24,13 @@ typedef struct {
 } Agenda;
 
 // Declarando funçoes
-void inicializarAgenda(Agenda *agenda); // Inicializa a agenda
+void inicializarAgenda(Agenda *agenda); // Inicia a agenda
 int adicionarContato(Agenda *agenda, const char *nome, const char *sobrenome, const char *email, const char *telefone); // Adiciona um contato na agenda
 void listarContatos(const Agenda *agenda); // Lista todos os contatos na agenda
 int deletarContato(Agenda *agenda, const char *telefone); // Deleta um contato da agenda
 void salvarAgenda(const Agenda *agenda, const char *nomeArquivo); // Salva a agenda em um arquivo
 void carregarAgenda(Agenda *agenda, const char *nomeArquivo); // Carrega a agenda de um arquivo
 int validarEmail(const char *email); // Valida o email
-int telefoneExiste(const Agenda *agenda, const char *telefone); // Verifica se o telefone ja existe na agenda
+int telefoneExiste(const Agenda *agenda, const char *telefone); // Verifica se o telefone ja existe 
 
 #endif 
