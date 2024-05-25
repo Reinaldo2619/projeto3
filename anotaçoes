@@ -1,0 +1,8 @@
+    gcc *.c && ./a.out
+    git add nome
+    git commit -m "escreva"   
+    git push -u origin main
+
+
+// Obrigatorio fazer o pr e cada um corrigir o do outro
+// vou terminar de comentar o contatos.c (acho que o H nao precisa)

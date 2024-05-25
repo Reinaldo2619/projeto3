@@ -262,4 +262,5 @@ int telefoneExiste(const Agenda *agenda, const char *telefone) {
   }
 
   return 0; // Retorna 0 se o telefone não existir em nenhuma lista
+
 }

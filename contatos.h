@@ -3,6 +3,7 @@
 
 #define MAX_CONTATOS 255 // Define o número máximo de contatos na agenda
 
+
 // Estrutura para armazenar informações do contato
 typedef struct {
   char nome[50];      // Nome do contato
@@ -44,3 +45,4 @@ int telefoneExiste(const Agenda *agenda, const char *telefone);
 // Função para carregar a agenda de um arquivo
 
 #endif
+

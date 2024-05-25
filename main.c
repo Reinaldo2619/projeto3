@@ -4,6 +4,7 @@
 
 // Função para inicializar a agenda
 int main() {
+
   // Declaração das agendas
   Agenda agenda_pessoais;
   Agenda agenda_trabalho;
@@ -153,4 +154,5 @@ int main() {
   } while (opcao != 0);
 
   return 0;
+
 }
