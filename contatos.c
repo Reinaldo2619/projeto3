@@ -1,126 +1,266 @@
-//        gcc *.c && ./a.out
-//        git add nome
-//        git commit -m "escreva"
-//        git push -u origin main
+#include "contatos.h" // Inclui o arquivo de cabeçalho contatos.h
+#include <regex.h>    // Inclui a biblioteca para trabalhar com expressões regulares
+#include <stdio.h>    // Inclui a biblioteca padrão de entrada e saída
+#include <string.h>   // Inclui a biblioteca para manipulação de strings
 
-//Bibliotecas
-#include "contatos.h" 
-#include <stdio.h>
-#include <string.h> 
-#include <regex.h> 
-
-// Inicializa a agenda
+// Função para inicializar a agenda, configurando as quantidades de contatos pessoais e de trabalho para zero
 void inicializarAgenda(Agenda *agenda) {
-  agenda->quantidade = 0; // Define a quantidade de contatos como 0
+  agenda->quantidade_pessoais = 0;
+  agenda->quantidade_trabalho = 0;
 }
 
-// Funçao para validar o email 
-int validarEmail(const char *email) {
-    const char *regex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
-    regex_t reg; 
-    if (regcomp(&reg, regex, REG_EXTENDED) != 0) { // Compilar
-        return 0; // Retornarr 0 se houver erro na compilação
-    }
-
-    // Validar o email
-    int result = regexec(&reg, email, 0, NULL, 0);
-    regfree(&reg); // Libera a memória
-
-    return result == 0; // Retorna 1 se o email for valido, caso nao seja retorna 0
-}
-
-// Função para verificar se o telefone ja existe
-int telefoneExiste(const Agenda *agenda, const char *telefone) {
-    // Loop para verificar cada contato 
-    for (int i = 0; i < agenda->quantidade; i++) {
-        if (strcmp(agenda->contatos[i].telefone, telefone) == 0) {
-            return 1; // Retorna 1 se o telefone ja existe
-        }
-    }
-    return 0; // Retorna 0 se o telefone nao existe
-}
-// Funçao para adicionar um contato na agenda
-int adicionarContato(Agenda *agenda, const char *nome, const char *sobrenome, const char *email, const char *telefone) {
-  // Verifica se a agenda esta cheia
-  if (agenda->quantidade >= MAX_CONTATOS) {
-    printf("Erro, limite de contatos foi atingido.\n");
-    return 0; // Retorna 0 caso a agenda ja tenha atingido o limite
+// Função para adicionar um contato pessoal à agenda
+int adicionarContatoPessoal(Agenda *agenda, const char *nome,
+                            const char *sobrenome, const char *email,
+                            const char *telefone) {
+  // Verifica se o limite de contatos pessoais foi atingido
+  if (agenda->quantidade_pessoais >= MAX_CONTATOS) {
+    printf("Erro, limite de contatos pessoais foi atingido.\n");
+    return 0;
   }
 
-  // Verifica se o email e valido
+  // Valida o formato do email usando uma expressão regular
   if (!validarEmail(email)) {
     printf("Email inválido. Por favor, insira um email válido.\n");
-    return 0; // Retorna 0 se o email for invalido
+    return 0;
   }
 
-  // Verifica se o telefone ja existe 
+  // Verifica se o telefone já existe na agenda
   if (telefoneExiste(agenda, telefone)) {
     printf("Erro, telefone já existe.\n");
-    return 0; // Retorna 0 se o telefone ja existe
+    return 0;
   }
 
-  // Copia os dados do contato para a proxima posiçao na agenda
-  strcpy(agenda->contatos[agenda->quantidade].nome, nome);
-  strcpy(agenda->contatos[agenda->quantidade].sobrenome, sobrenome);
-  strcpy(agenda->contatos[agenda->quantidade].email, email);
-  strcpy(agenda->contatos[agenda->quantidade].telefone, telefone);
+  // Cria um novo contato e o adiciona à lista de contatos pessoais
+  Contato novo_contato;
+  strcpy(novo_contato.nome, nome);
+  strcpy(novo_contato.sobrenome, sobrenome);
+  strcpy(novo_contato.email, email);
+  strcpy(novo_contato.telefone, telefone);
 
-  // Incrementa a quantidade de contatos
-  agenda->quantidade++;
-  return 1; // Retorna 1 se o contato foi adicionado
+  agenda->contatos_pessoais[agenda->quantidade_pessoais++] = novo_contato;
+
+  return 1; // Retorna 1 se o contato foi adicionado com sucesso
+  printf("Contato adicionado com sucesso.\n");
 }
 
-// Funçao para listar os contatos da agenda
-void listarContatos(const Agenda *agenda) {
-  printf("Lista de Contatos:\n");
-  printf("------------------\n");
-  // Loop para imprimir os contatos
-  for (int i = 0; i < agenda->quantidade; i++) {
+// Função para adicionar um contato de trabalho à agenda (semelhante à função adicionarContatoPessoal)
+int adicionarContatoTrabalho(Agenda *agenda, const char *nome,
+                             const char *sobrenome, const char *email,
+                             const char *telefone) {
+  // Verifica se o limite de contatos de trabalho foi atingido
+  if (agenda->quantidade_trabalho >= MAX_CONTATOS) {
+    printf("Erro, limite de contatos de trabalho foi atingido.\n");
+    return 0;
+  }
+
+  // Valida o formato do email
+  if (!validarEmail(email)) {
+    printf("Email inválido. Por favor, insira um email válido.\n");
+    return 0;
+  }
+
+  // Verifica se o telefone já existe na agenda
+  if (telefoneExiste(agenda, telefone)) {
+    printf("Erro, telefone já existe.\n");
+    return 0;
+  }
+
+  // Cria um novo contato e o adiciona à lista de contatos de trabalho
+  Contato novo_contato;
+  strcpy(novo_contato.nome, nome);
+  strcpy(novo_contato.sobrenome, sobrenome);
+  strcpy(novo_contato.email, email);
+  strcpy(novo_contato.telefone, telefone);
+
+  agenda->contatos_trabalho[agenda->quantidade_trabalho++] = novo_contato;
+
+  return 1;
+  printf("Contato adicionado com sucesso.\n");
+}
+
+// Função para listar os contatos pessoais na agenda
+void listarContatosPessoais(const Agenda *agenda) {
+  printf("Lista de Contatos Pessoais:\n");
+  printf("---------------------------\n");
+  for (int i = 0; i < agenda->quantidade_pessoais; i++) {
     printf("%d. Nome: %s %s\n   Email: %s\n   Telefone: %s\n", i + 1,
-           agenda->contatos[i].nome, agenda->contatos[i].sobrenome,
-           agenda->contatos[i].email, agenda->contatos[i].telefone);
+           agenda->contatos_pessoais[i].nome,
+           agenda->contatos_pessoais[i].sobrenome,
+           agenda->contatos_pessoais[i].email,
+           agenda->contatos_pessoais[i].telefone);
   }
 }
 
-// Funçao para deletar contato 
-int deletarContato(Agenda *agenda, const char *telefone) {
-  int encontrado = 0; // Variavel para verificar se o contato foi encontrado
-  // Loop para verificar os contatos 
-  for (int i = 0; i < agenda->quantidade; i++) {
-    if (strcmp(agenda->contatos[i].telefone, telefone) == 0) {
-      encontrado = 1; // Define como encontrado se o telefone for igual
-      // Move todos os contatos depois de encontrar, uma posição para tras
-      for (int j = i; j < agenda->quantidade - 1; j++) {
-        agenda->contatos[j] = agenda->contatos[j + 1];
+// Função para listar os contatos de trabalho na agenda (semelhante à função listarContatosPessoais)
+void listarContatosTrabalho(const Agenda *agenda) {
+  printf("-----------------------------\n");
+  printf("Lista de Contatos de Trabalho:\n");
+  printf("------------------------------\n");
+  for (int i = 0; i < agenda->quantidade_trabalho; i++) {
+    printf("I-------------------------------------I\n");
+    printf("%d. Nome: %s %s\n   Email: %s\n   Telefone: %s\n", i + 1,
+           agenda->contatos_trabalho[i].nome,
+           agenda->contatos_trabalho[i].sobrenome,
+           agenda->contatos_trabalho[i].email,
+           agenda->contatos_trabalho[i].telefone);
+  }
+  printf("I-------------------------------------I\n");
+}
+
+// Função para excluir um contato pessoal da agenda
+int deletarContatoPessoal(Agenda *agenda, const char *telefone) {
+  int encontrado = 0;
+  for (int i = 0; i < agenda->quantidade_pessoais; i++) {
+    if (strcmp(agenda->contatos_pessoais[i].telefone, telefone) == 0) {
+      encontrado = 1;
+      // Remove o contato da lista movendo os contatos subsequentes uma posição para trás
+      for (int j = i; j < agenda->quantidade_pessoais - 1; j++) {
+        agenda->contatos_pessoais[j] = agenda->contatos_pessoais[j + 1];
       }
-      agenda->quantidade--; // Decrementa a quantidade de contatos
+      // Decrementa a quantidade de contatos pessoais na agenda
+      agenda->quantidade_pessoais--;
       break;
     }
   }
-  return encontrado; // Retorna 1 se o contato foi encontrado e deletado caso nao seja retornar 0
+  return encontrado; // Retorna 1 se o contato foi encontrado e excluído, 0 caso contrário
+  printf("Contato deletado com sucesso.\n");
 }
 
-// Funçao para salvar a agenda em um arquivo
-void salvarAgenda(const Agenda *agenda, const char *nomeArquivo) {
-  FILE *arquivo = fopen(nomeArquivo, "wb"); // Abre o arquivo para escrita binaria
-  if (arquivo == NULL) {
-    printf("Erro ao abrir o arquivo\n");
-    return; // Retorna se houver erro ao abrir
+// Função para excluir um contato de trabalho da agenda (semelhante à função deletarContatoPessoal)
+int deletarContatoTrabalho(Agenda *agenda, const char *telefone) {
+  int encontrado = 0;
+  for (int i = 0; i < agenda->quantidade_trabalho; i++) {
+    if (strcmp(agenda->contatos_trabalho[i].telefone, telefone) == 0) {
+      encontrado = 1;
+      for (int j = i; j < agenda->quantidade_trabalho - 1; j++) {
+        agenda->contatos_trabalho[j] = agenda->contatos_trabalho[j + 1];
+      }
+      agenda->quantidade_trabalho--;
+      break;
+      printf("Contato de trabalho excluído com sucesso.\n");
+    }
   }
-  // Escreve os dados da agenda no arquivo
-  fwrite(agenda, sizeof(Agenda), 1, arquivo);
-  fclose(arquivo); // Fecha o arquivo
+  return encontrado;
+  printf("Contato de trabalho excluído com sucesso.\n");
 }
 
-// Funçao para carregar a agenda de um arquivo
-void carregarAgenda(Agenda *agenda, const char *nomeArquivo) {
-  FILE *arquivo = fopen(nomeArquivo, "rb"); // Abre o arquivo para leitura binaria
-  if (arquivo == NULL) {
-    printf("Erro ao abrir o arquivo\n");
-    return; // Retorna se houver erro ao abrir o arquivo
+// Função para alterar um contato pessoal na agenda
+int alterarContatoPessoal(Agenda *agenda, const char *telefone) {
+  for (int i = 0; i < agenda->quantidade_pessoais; i++) {
+    if (strcmp(agenda->contatos_pessoais[i].telefone, telefone) == 0) {
+      // Encontrou o contato
+      char novo_nome[50], novo_sobrenome[50], novo_email[50], novo_telefone[50];
+
+      // Solicita os novos dados
+      printf("Digite o novo nome: ");
+      if (scanf("%s", novo_nome) != 1) {
+        printf("ERRO");
+        return 1;
+      }
+      printf("Digite o novo sobrenome: ");
+      if (scanf("%s", novo_sobrenome) != 1) {
+        printf("ERRO");
+        return 1;
+      }
+      printf("Digite o novo email: ");
+      if (scanf("%s", novo_email) != 1) {
+        printf("ERRO");
+        return 1;
+      }
+      printf("Digite o novo telefone: ");
+      if (scanf("%s", novo_telefone) != 1) {
+        printf("ERRO");
+        return 1;
+      }
+
+      // Atualiza os dados do contato
+      strcpy(agenda->contatos_pessoais[i].nome, novo_nome);
+      strcpy(agenda->contatos_pessoais[i].sobrenome, novo_sobrenome);
+      strcpy(agenda->contatos_pessoais[i].email, novo_email);
+      strcpy(agenda->contatos_pessoais[i].telefone, novo_telefone);
+
+      return 1; // Retorna 1 indicando que o contato foi alterado
+      printf("Contato pessoal alterado com sucesso.\n");
+    }
+  }
+  // Se o contato não for encontrado, retorna 0
+  return 0;
+}
+
+// Função para alterar um contato de trabalho na agenda (semelhante à função alterarContatoPessoal)
+int alterarContatoTrabalho(Agenda *agenda, const char *telefone) {
+  for (int i = 0; i < agenda->quantidade_trabalho; i++) {
+    if (strcmp(agenda->contatos_trabalho[i].telefone, telefone) == 0) {
+      // Encontrou o contato
+      char novo_nome[50], novo_sobrenome[50], novo_email[50], novo_telefone[50];
+
+      // Solicita os novos dados
+      printf("Digite o novo nome: ");
+      if (scanf("%s", novo_nome) != 1) {
+        printf("ERRO");
+        return 1;
+      }
+      printf("Digite o novo sobrenome: ");
+      if (scanf("%s", novo_sobrenome) != 1) {
+        printf("ERRO");
+        return 1;
+      }
+      printf("Digite o novo email: ");
+      if (scanf("%s", novo_email) != 1) {
+        printf("ERRO");
+        return 1;
+      }
+      printf("Digite o novo telefone: ");
+      if (scanf("%s", novo_telefone) != 1) {
+        printf("ERRO");
+        return 1;
+      }
+
+      // Atualiza os dados do contato
+      strcpy(agenda->contatos_trabalho[i].nome, novo_nome);
+      strcpy(agenda->contatos_trabalho[i].sobrenome, novo_sobrenome);
+      strcpy(agenda->contatos_trabalho[i].email, novo_email);
+      strcpy(agenda->contatos_trabalho[i].telefone, novo_telefone);
+
+      return 1; // Retorna 1 indicando que o contato foi alterado
+      printf("Contato de trabalho alterado com sucesso.\n");
+    }
+  }
+  // Se o contato não for encontrado, retorna 0
+  return 0;
+}
+
+// Função para validar o formato do email usando uma expressão regular
+int validarEmail(const char *email) {
+  const char *regex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+  regex_t reg;
+  if (regcomp(&reg, regex, REG_EXTENDED) != 0) {
+    return 0;
   }
 
-  // Le os dados da agenda do arquivo
-  int lidos = fread(agenda, sizeof(Agenda), 1, arquivo);
-  fclose(arquivo); // Fecha o arquivo
+  int result = regexec(&reg, email, 0, NULL, 0);
+  regfree(&reg);
+
+  return result == 0; // Retorna 1 se o email for válido, 0 caso contrário
+}
+
+// Função para verificar se um telefone já existe na agenda
+int telefoneExiste(const Agenda *agenda, const char *telefone) {
+  // Verifica se o telefone existe na lista de contatos pessoais
+  for (int i = 0; i < agenda->quantidade_pessoais; i++) {
+    if (strcmp(agenda->contatos_pessoais[i].telefone, telefone) == 0) {
+      return 1; // Retorna 1 se o telefone existir na lista de contatos pessoais
+    }
+  }
+
+  // Verifica se o telefone existe na lista de contatos de trabalho
+  for (int i = 0; i < agenda->quantidade_trabalho; i++) {
+    if (strcmp(agenda->contatos_trabalho[i].telefone, telefone) == 0) {
+      return 1; // Retorna 1 se o telefone existir na lista de contatos de trabalho
+    }
+  }
+
+  return 0; // Retorna 0 se o telefone não existir em nenhuma lista
+
 }
